@@ -1,3 +1,5 @@
+# Taaga Women - Full Stack Application
+
 CSE471 PROJECT – TAAGA WOMEN
 ============================
 
@@ -6,235 +8,274 @@ Full‑stack web app:
 - Frontend: React + Vite (client/)
 - Auth & Database: Supabase (Google login, Postgres)
 
-This file explains:
-- How to run backend + frontend
-- How to set up environment variables
-- How the branches and teamwork workflow work
+## Project Structure
 
---------------------------------------------------
-1. PROJECT STRUCTURE
---------------------------------------------------
+```
+taaga_women/
+├── client/          # React frontend application
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── auth/        # Authentication components
+│   │   │   ├── dashboard/   # Dashboard component
+│   │   │   ├── profile/     # Profile component
+│   │   │   ├── products/    # Product components
+│   │   │   └── common/      # Shared components
+│   │   └── lib/             # Utilities and API client
+│   └── package.json
+│
+└── server/          # Express.js backend API
+    ├── app.js       # Main server file
+    ├── config/      # Configuration files
+    ├── controllers/ # Request handlers (MVC)
+    ├── models/      # Data models (MVC)
+    ├── routes/      # Route definitions (MVC)
+    ├── middleware/  # Custom middleware
+    └── package.json
+```
 
-CSE471_project/
-  server/
-    app.js
-    config/
-    controllers/
-    models/
-    routes/
-  client/
-    src/
-      components/
-      lib/
-      App.jsx
-  .gitignore
-  README.md
+## Prerequisites
 
-- server/ = Node/Express backend using MVC style.
-- client/ = React + Vite frontend with Supabase auth.
-
---------------------------------------------------
-2. PREREQUISITES
---------------------------------------------------
-
-You need:
-- Node.js (LTS)
-- npm
+- Node.js (v18 or higher)
+- npm or yarn
 - Git
 - Access to the shared Supabase project (ask project owner for URL + anon key)
 
---------------------------------------------------
-3. CLONE THE REPOSITORY
---------------------------------------------------
+## Environment Variables
 
-Clone and enter the project:
+### Backend (.env in `/server` directory)
 
-git clone https://github.com/Kingkor-Sarker/CSE471_project.git
-cd CSE471_project
+Create a `.env` file in the `server/` directory:
 
-We use two main branches:
-- main        = protected, stable code only
-- development = main working branch for the team
+```env
+PORT=1962
+NODE_ENV=development
+SUPABASE_URL=your_supabase_url
+SUPABASE_KEY=your_supabase_service_role_key
+SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-After cloning, switch to development:
+### Frontend (.env in `/client` directory)
 
-git checkout development
+Create a `.env` file in the `client/` directory:
 
---------------------------------------------------
-4. BACKEND SETUP (server)
---------------------------------------------------
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_API_URL=http://localhost:1962/api
+```
 
-From the project root:
+**Important:** These files are ignored by Git and MUST NOT be committed.
 
+## Installation
+
+### 1. Install Backend Dependencies
+
+```bash
 cd server
 npm install
+```
 
-Create server/.env (DO NOT COMMIT THIS FILE):
+### 2. Install Frontend Dependencies
 
-PORT=8000
-SUPABASE_URL=YOUR_SUPABASE_URL
-SUPABASE_KEY=YOUR_SUPABASE_KEY
-
-Ask the project owner for the correct Supabase values.
-
-Run the backend:
-
-node app.js
-
-Backend runs at:
-
-http://localhost:8000
-
-Test in browser or Postman:
-
-GET http://localhost:8000/api/test
-
-Expected response:
-
-{ "message": "Test route is working" }
-
---------------------------------------------------
-5. FRONTEND SETUP (client)
---------------------------------------------------
-
-From the project root:
-
+```bash
 cd client
 npm install
+```
 
-Create client/.env (DO NOT COMMIT THIS FILE):
+## Running the Application
 
-VITE_SUPABASE_URL=YOUR_SUPABASE_URL
-VITE_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+You need to run both the backend and frontend servers simultaneously.
 
-Use the same Supabase URL and anon key provided by the project owner.
+### Option 1: Run in Separate Terminals (Recommended)
 
-Run the frontend:
-
+**Terminal 1 - Backend Server:**
+```bash
+cd server
+npm start
+# or for development with auto-reload:
 npm run dev
+```
 
-Frontend runs at (default):
+The backend server will run on: **http://localhost:1962**
 
-http://localhost:5173/
+**Terminal 2 - Frontend Server:**
+```bash
+cd client
+npm run dev
+```
 
-Open this URL in your browser.
-You should see the React app, including a “Continue with Google” button using Supabase Auth.
+The frontend will run on: **http://localhost:5173**
 
---------------------------------------------------
-6. ENVIRONMENT VARIABLES & SECRETS
---------------------------------------------------
+### Option 2: Run Both from Root
 
-Each developer must create their own:
-- server/.env
-- client/.env
+From the root directory:
+```bash
+npm run dev
+```
 
-These files are ignored by Git and MUST NOT be committed.
+This will start both servers simultaneously.
 
-Shared values (ask the project owner):
-- SUPABASE_URL
-- SUPABASE_KEY (if backend needs it)
-- VITE_SUPABASE_URL
-- VITE_SUPABASE_ANON_KEY (Supabase anon key)
+## API Endpoints
 
-Example:
+The backend API is available at `http://localhost:1962/api`
 
-server/.env
+### Authentication API
 
-PORT=8000
-SUPABASE_URL=THE_SHARED_SUPABASE_URL
-SUPABASE_KEY=THE_SHARED_SERVICE_OR_ANON_KEY
+- `POST /api/auth/login` - Login user with email and password
 
-client/.env
+### Profile API
 
-VITE_SUPABASE_URL=THE_SHARED_SUPABASE_URL
-VITE_SUPABASE_ANON_KEY=THE_SHARED_ANON_KEY
+- `GET /api/profile/:userId` - Get user profile
+- `PUT /api/profile/:userId` - Update user profile
 
-These values are shared privately (WhatsApp/Messenger), not stored in the repo.
+### Products API
 
---------------------------------------------------
-7. .GITIGNORE (IMPORTANT)
---------------------------------------------------
+- `GET /api/products` - Get all products
+- `GET /api/products/:id` - Get product by ID
+- `POST /api/products` - Create a new product
+- `PUT /api/products/:id` - Update a product
+- `DELETE /api/products/:id` - Delete a product
 
-Important entries in root .gitignore:
+### Health Check
 
-node_modules/
-dist/
-build/
+- `GET /api/test` - Server health check
+- `POST /api/debug` - Debug endpoint to test request body
 
-.env
-client/.env
-server/.env
+## Frontend Routes
 
-This keeps dependencies and secrets out of the repo.
+- `/` - Redirects to dashboard
+- `/login` - Login page
+- `/signup` - Signup page
+- `/dashboard` - Protected dashboard (requires authentication)
 
---------------------------------------------------
-8. BRANCH STRATEGY
---------------------------------------------------
+## Architecture
+
+### Backend (MVC Pattern)
+
+- **Models** (`models/`): Database operations and data access
+- **Controllers** (`controllers/`): Request handling and business logic
+- **Routes** (`routes/`): Route definitions and middleware
+- **Middleware** (`middleware/`): Error handling, authentication, etc.
+
+### Frontend
+
+- **Components**: Organized by feature (auth, dashboard, profile, products)
+- **API Client**: Centralized API communication (`lib/api.js`)
+- **Routing**: React Router for client-side routing
+- **Authentication**: Supabase Auth with protected routes
+- **Styling**: Tailwind CSS for modern UI
+
+## Branch Strategy
 
 We use this branching model:
 
-- main        = protected, stable production code only
-- development = main working branch for the team
-- feature/*   = individual feature branches
+- **main** = protected, stable production code only
+- **development** = main working branch for the team
+- **feature/*** = individual feature branches
 
-Rules:
-- DO NOT push directly to main.
-- All work must start from development.
-- Changes are merged into development via Pull Requests (PRs).
-- Only the maintainer merges development into main after testing.
+### Rules:
 
---------------------------------------------------
-9. HOW TO WORK ON A NEW FEATURE
---------------------------------------------------
+- DO NOT push directly to main
+- All work must start from development
+- Changes are merged into development via Pull Requests (PRs)
+- Only the maintainer merges development into main after testing
 
-1) Make sure you are on development and up to date:
+### How to Work on a New Feature
 
-git checkout development
-git pull origin development
+1. Make sure you are on development and up to date:
+   ```bash
+   git checkout development
+   git pull origin development
+   ```
 
-2) Create a feature branch from development:
+2. Create a feature branch from development:
+   ```bash
+   git checkout -b feature/your-name-task
+   ```
 
-git checkout -b feature/your-name-task
+3. Work on your changes, then commit:
+   ```bash
+   git add .
+   git commit -m "Describe your change"
+   ```
 
-Examples:
-feature/kingkor-user-profile
-feature/teammate-cart-ui
+4. Push your feature branch:
+   ```bash
+   git push -u origin feature/your-name-task
+   ```
 
-3) Work on your changes, then commit:
+5. Create a Pull Request (PR) on GitHub:
+   - Go to the repo on GitHub
+   - Click "Compare & pull request"
+   - Base branch: development
+   - Compare branch: feature/your-name-task
 
-git add .
-git commit -m "Describe your change"
+6. Ask a teammate to review and merge the PR into development
 
-4) Push your feature branch:
+## Development
 
-git push -u origin feature/your-name-task
+### Backend Development
 
-5) Create a Pull Request (PR) on GitHub:
-- Go to the repo on GitHub.
-- Click “Compare & pull request”.
-- Base branch: development
-- Compare branch: feature/your-name-task
+```bash
+cd server
+npm run dev  # Auto-reload on file changes
+```
 
-6) Ask a teammate to review and merge the PR into development.
+### Frontend Development
 
---------------------------------------------------
-10. MERGING INTO MAIN
---------------------------------------------------
+```bash
+cd client
+npm run dev  # Vite dev server with hot reload
+```
 
-- Only the maintainer (project owner) merges development into main.
-- This should happen after testing or at project milestones.
-- Nobody pushes directly to main.
+## Troubleshooting
 
-Typical flow:
+### CORS Issues
 
-feature branch → PR into development → test → maintainer merges development into main
+If you encounter CORS errors, ensure:
+1. Backend has CORS enabled (already configured in `app.js`)
+2. Frontend is using the correct API URL
+3. Both servers are running
 
---------------------------------------------------
-11. NOTES FOR TEAMMATES
---------------------------------------------------
+### Connection Issues
 
-- Always work on a branch created from development, NOT from main.
-- Never commit any .env files or Supabase keys.
+1. Verify both servers are running
+2. Check environment variables are set correctly
+3. Ensure ports 1962 (backend) and 5173 (frontend) are available
+4. Check browser console for errors
+
+### Supabase Connection
+
+1. Verify Supabase credentials in `.env` files
+2. Check Supabase project is active
+3. Ensure database tables exist (`products`, `profiles`)
+
+## Production Build
+
+### Build Frontend
+
+```bash
+cd client
+npm run build
+```
+
+The built files will be in `client/dist/`
+
+### Run Backend in Production
+
+```bash
+cd server
+NODE_ENV=production npm start
+```
+
+## Notes for Teammates
+
+- Always work on a branch created from development, NOT from main
+- Never commit any .env files or Supabase keys
 - Ask the project owner for:
   - Supabase URL and anon key
-  - Questions about backend routes or database structure.
+  - Questions about backend routes or database structure
+
+## License
+
+ISC
