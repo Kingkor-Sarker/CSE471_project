@@ -5,3 +5,23 @@ build/
 .env
 client/.env
 server/.env
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Documentation files (keep only README.md)
+API_DOCUMENTATION.md
+CODE_SNIPPETS.md
+DEBUG_REQ_BODY.md
+ENV_SETUP.md
+POSTMAN_EXACT_STEPS.md
+POSTMAN_FIX.md
+POSTMAN_QUICK_FIX.txt
+POSTMAN_TESTING_GUIDE.md
+QUICKSTART.md
+TROUBLESHOOTING.md
+client/TAILWIND_FIX.md
